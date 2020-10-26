@@ -79,9 +79,10 @@ if __name__ == '__main__':
     if tfs_stats is not None:
         with app.app_context():
             with open(tfs_stats) as opened_json:
-                for tf in json.loads(opened_json.readline()):
-                    with open(os.path.expanduser('~/{}.html'.format(tf)), 'w') as out:
+                d = json.loads(opened_json.readline())
+                for tf in d.keys():
+                    with open(os.path.expanduser('~/report/{}.html'.format(tf)), 'w') as out:
                         print('Saving {}'.format(tf))
-                        out.write(hello(tf))
+                        out.write(hello(tf, dictionary=d))
     else:
         app.run(debug=True, host='0.0.0.0', port=8000)

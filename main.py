@@ -31,6 +31,7 @@ def draw_svg(pcm_path):
                     out_path=out_path,
                     unit_height=80,
                     unit_width=40)
+    svg2png(url=out_path, write_to=out_path, output_height='30', dpi=10)
     return out_path
 
 

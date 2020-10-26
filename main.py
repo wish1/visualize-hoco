@@ -5,7 +5,7 @@ from base64 import b64encode
 from drawlogo import start
 import requests
 from flask import render_template, Flask
-
+import cairosvg
 app = Flask(__name__)
 
 
@@ -30,6 +30,8 @@ def draw_svg(pcm_path):
                     out_path=out_path,
                     unit_height=600,
                     unit_width=300)
+
+    cairosvg.svg2png(url=out_path, write_to=out_path)
     return out_path
 
 

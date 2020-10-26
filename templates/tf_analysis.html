@@ -1,58 +1,60 @@
 <!doctype html>
-<head>
-    <title>{{name}} - HOCOMOCO report </title>
-    <link href=https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.20/css/dataTables.bootstrap4.min.css rel=stylesheet>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
-<body class="container-fluid">
-    <h1>Report for {{name}}</h1>
-    <table id='tf-table'  class="table table-bordered table-sm">
-      <thead class="thead-light">
-        <tr>
-            <th scope="col">Peak Name</th>
-            <th scope="col">Caller</th>
-            <th scope="col">Selected by</th>
-            <th scope="col">Motif type</th>
-            <th scope="col">#</th>
-            <th scope="col">Motif</th>
-            <th scope="col">Motif len</th>
-            <th scope="col">Total time</th>
-        </tr>
-      </thead>
-      <tbody>
-      {%for i in range(0, length)%}
-        <tr>
-            <td>{{tf_data[i].name}}</td>
-            <td>{{tf_data[i].caller}}</td>
-            <td>{{tf_data[i].selected_by}}</td>
-            <td>{{tf_data[i].motif_type}}</td>
-            <td>{{tf_data[i].motif_index}}</td>
-            <td >
-                <img height="30px" src="{{tf_data[i].motif_image}}"
-                >
-            </td>
-            <td>{{tf_data[i].motif_len}}</td>
-            <td>{{tf_data[i].time}}</td>
-        </tr>
-      {%endfor%}
-      </tbody>
-    </table>
+<html lang="en">
+    <head>
+        <title>{{name}} - HOCOMOCO report </title>
+        <link href=https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.20/css/dataTables.bootstrap4.min.css rel=stylesheet>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body class="container-fluid">
+        <h1>Report for {{name}}</h1>
+        <table id='tf-table'  class="table table-bordered table-sm">
+          <thead class="thead-light">
+            <tr>
+                <th scope="col">Peak Name</th>
+                <th scope="col">Caller</th>
+                <th scope="col">Selected by</th>
+                <th scope="col">Motif type</th>
+                <th scope="col">#</th>
+                <th scope="col">Motif</th>
+                <th scope="col">Motif len</th>
+                <th scope="col">Total time</th>
+            </tr>
+          </thead>
+          <tbody>
+          {%for i in range(0, length)%}
+            <tr>
+                <td>{{tf_data[i].name}}</td>
+                <td>{{tf_data[i].caller}}</td>
+                <td>{{tf_data[i].selected_by}}</td>
+                <td>{{tf_data[i].motif_type}}</td>
+                <td>{{tf_data[i].motif_index}}</td>
+                <td >
+                    <img height="30px" src="{{tf_data[i].motif_image}}"
+                    >
+                </td>
+                <td>{{tf_data[i].motif_len}}</td>
+                <td>{{tf_data[i].time}}</td>
+            </tr>
+          {%endfor%}
+          </tbody>
+        </table>
 
-    <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js></script>
-    <script src=https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.20/js/jquery.dataTables.min.js></script>
-    <script src=https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.20/js/dataTables.bootstrap4.min.js></script>
-    <script>
-        $(document).ready(function() {
-            $('#tf-table').DataTable({
-                "paging": false,
-                "searching": false,
-                "info": false,
-                'columnDefs': [
-    {
-        'targets': [4, 5],
-        'orderable': false,
-     }]
+        <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js></script>
+        <script src=https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.20/js/jquery.dataTables.min.js></script>
+        <script src=https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.20/js/dataTables.bootstrap4.min.js></script>
+        <script>
+            $(document).ready(function() {
+                $('#tf-table').DataTable({
+                    "paging": false,
+                    "searching": false,
+                    "info": false,
+                    'columnDefs': [
+        {
+            'targets': [4, 5],
+            'orderable': false,
+         }]
+                });
             });
-        });
-    </script>
-</body>
+        </script>
+    </body>
+</html>

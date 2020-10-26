@@ -53,6 +53,7 @@ def hello(name=None, dictionary=None):
                    'motif_index': 0,
                    'motif_len': 4,
                    'time': '10h',
+                   'diag': [],
                    'motif_image': 'http://greco-bit.informatik.uni-halle.de:8080/motifs/motif2557.svg'
                },
                {
@@ -67,7 +68,7 @@ def hello(name=None, dictionary=None):
                }
            ],
         }
-        get_image_code_for_json(dictionary)
+    get_image_code_for_json(dictionary)
     tf_data = dictionary.get(name)
     if not name or not tf_data:
         return 'Error', 404

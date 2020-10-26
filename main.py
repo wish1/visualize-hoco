@@ -41,7 +41,7 @@ def get_image_code_for_json(tfs_dict):
             print('Doing {}'.format(exp))
             if exp.get('motif_image') is None:
                 exp['motif_image'] = draw_svg(exp['pcm_path'])
-                print('Doing {}, size: {}'.format(exp,
+                print('Doing {}, size: {}'.format(exp.name,
                                                   os.path.getsize(exp['motif_image'])))
             exp['motif_image'] = get_image_code(exp['motif_image'])
 

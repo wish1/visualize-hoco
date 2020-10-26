@@ -1,0 +1,85 @@
+import os
+import sys
+from base64 import b64encode
+from drawlogo import start
+import requests
+from flask import render_template, Flask
+
+app = Flask(__name__)
+
+
+def get_image_code(svg):
+    if svg.startswith('http'):
+        r = requests.get(svg)
+        result = r.content
+    else:
+        with open(svg, 'rb') as svg_image:
+            result = svg_image.readlines()
+        os.remove(svg)
+    return 'data:image/svg+xml;base64,' + b64encode(result).decode('ascii')
+
+
+def draw_svg(pcm_path):
+    directory = os.path.expanduser('~/svgs')
+    out_path = os.path.join(directory, os.path.basename(pcm_path))
+    if not os.path.isdir(directory):
+        os.mkdir(directory)
+    start.draw_logo(pcm_path,
+                    out_path=out_path,
+                    unit_height=600,
+                    unit_width=300)
+    return out_path
+
+
+def get_image_code_for_json(tfs_dict):
+    for t_factor in tfs_dict:
+        for exp in tfs_dict[t_factor]:
+            if not exp['motif_image']:
+                exp['motif_image'] = draw_svg(exp['pcm_path'])
+            exp['motif_image'] = get_image_code(exp['motif_image'])
+
+
+@app.route('/hoco/<name>')
+def hello(name=None, json=None):
+    if json is None:
+        json = {
+           'CTCF': [
+               {
+                   'name': 'PEAK456',
+                   'caller': 'macs',
+                   'motif_type': 'single',
+                   'selected_by': 'P-value',
+                   'motif_index': 0,
+                   'motif_len': 4,
+                   'time': '10h',
+                   'motif_image': 'http://greco-bit.informatik.uni-halle.de:8080/motifs/motif2557.svg'
+               },
+               {
+                   'name': 'PEAK456',
+                   'caller': 'gem',
+                   'selected_by': 'Score',
+                   'motif_type': 'flat',
+                   'motif_index': 0,
+                   'time': '16h',
+                   'motif_len': 7,
+                   'motif_image': 'http://greco-bit.informatik.uni-halle.de:8080/motifs/motif2558.svg'
+               }
+           ],
+        }
+        get_image_code_for_json(json)
+    tf_data = json.get(name)
+    if not name or not tf_data:
+        return 'Error', 404
+    return render_template('tf_analysis.html', tf_data=tf_data, name=name, length=len(tf_data))
+
+
+if __name__ == '__main__':
+    json = sys.argv[1] if len(sys.argv) > 1 else None
+    if json is not None:
+        with app.app_context():
+            for tf in json:
+                with open(os.path.expanduser('~/{}.html'.format(tf)), 'w') as out:
+                    print('Saving {}'.format(tf))
+                    out.write(hello(tf))
+    else:
+        app.run(debug=True, host='0.0.0.0', port=8000)

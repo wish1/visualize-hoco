@@ -29,9 +29,8 @@ def draw_svg(pcm_path):
         os.mkdir(directory)
     start.draw_logo(pcm_path,
                     out_path=out_path,
-                    unit_height=150,
-                    unit_width=75)
-    svg2png(url=out_path, write_to=out_path, output_height='30', dpi=1)
+                    unit_height=80,
+                    unit_width=40)
     return out_path
 
 

@@ -28,11 +28,12 @@ def draw_svg(pcm_path):
     if not os.path.isdir(directory):
         os.mkdir(directory)
     start.draw_logo(pcm_path,
-                    out_path=out_path,
+                    out_path=out_path + '.svg',
                     unit_height=600,
                     unit_width=300)
-    svg2png(url=out_path, write_to=out_path, output_height='100', dpi=1)
-    return out_path
+    svg2png(url=out_path + '.svg', write_to=out_path + '.png', output_height='100', dpi=1)
+    os.remove(out_path + '.svg')
+    return out_path + '.png'
 
 
 def get_image_code_for_json(tfs_dict):

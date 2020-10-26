@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 from base64 import b64encode
@@ -40,9 +41,9 @@ def get_image_code_for_json(tfs_dict):
 
 
 @app.route('/hoco/<name>')
-def hello(name=None, json=None):
-    if json is None:
-        json = {
+def hello(name=None, dictionary=None):
+    if dictionary is None:
+        dictionary = {
            'CTCF': [
                {
                    'name': 'PEAK456',
@@ -66,20 +67,21 @@ def hello(name=None, json=None):
                }
            ],
         }
-        get_image_code_for_json(json)
-    tf_data = json.get(name)
+        get_image_code_for_json(dictionary)
+    tf_data = dictionary.get(name)
     if not name or not tf_data:
         return 'Error', 404
     return render_template('tf_analysis.html', tf_data=tf_data, name=name, length=len(tf_data))
 
 
 if __name__ == '__main__':
-    json = sys.argv[1] if len(sys.argv) > 1 else None
-    if json is not None:
+    tfs_stats = sys.argv[1] if len(sys.argv) > 1 else None
+    if tfs_stats is not None:
         with app.app_context():
-            for tf in json:
-                with open(os.path.expanduser('~/{}.html'.format(tf)), 'w') as out:
-                    print('Saving {}'.format(tf))
-                    out.write(hello(tf))
+            with open(tfs_stats) as opened_json:
+                for tf in json.loads(opened_json.readline()):
+                    with open(os.path.expanduser('~/{}.html'.format(tf)), 'w') as out:
+                        print('Saving {}'.format(tf))
+                        out.write(hello(tf))
     else:
         app.run(debug=True, host='0.0.0.0', port=8000)

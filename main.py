@@ -35,7 +35,7 @@ def draw_svg(pcm_path):
 def get_image_code_for_json(tfs_dict):
     for t_factor in tfs_dict:
         for exp in tfs_dict[t_factor]:
-            if not exp['motif_image']:
+            if exp.get('motif_image') is not None:
                 exp['motif_image'] = draw_svg(exp['pcm_path'])
             exp['motif_image'] = get_image_code(exp['motif_image'])
 

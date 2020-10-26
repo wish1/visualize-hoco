@@ -57,7 +57,7 @@ def hello(name=None, dictionary=None):
                    'selected_by': 'P-value',
                    'motif_index': 0,
                    'motif_len': 4,
-                   'time': '10h',
+                   'time': '26m',
                    'diag': [],
                    'motif_image': 'http://greco-bit.informatik.uni-halle.de:8080/motifs/motif2557.svg'
                },
@@ -68,7 +68,7 @@ def hello(name=None, dictionary=None):
                    'motif_type': 'flat',
                    'motif_index': 0,
                    'time': '16h',
-                   'motif_len': 7,
+                   'motif_len': 23,
                    'motif_image': 'http://greco-bit.informatik.uni-halle.de:8080/motifs/motif2558.svg'
                }
            ],

@@ -19,7 +19,7 @@ def get_image_code(svg):
             result = svg_image.read()
 
         # os.remove(svg)
-    return 'data:image/svg+xml;base64,' + b64encode(result).decode('ascii')
+    return 'data:image/png;base64,' + b64encode(result).decode('ascii')
 
 
 def draw_svg(pcm_path):

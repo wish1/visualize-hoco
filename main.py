@@ -7,6 +7,8 @@ import requests
 from flask import render_template, Flask
 from cairosvg import svg2png
 
+from cor import dict_types, motif_dir, result_path
+
 app = Flask(__name__)
 
 
@@ -35,14 +37,32 @@ def draw_svg(pcm_path):
     return out_path
 
 
+def get_comp_motif_path(motif_name):
+    return os.path.join(motif_dir, motif_name + '.ppm')
+
+
 def get_image_code_for_json(tfs_dict):
     for t_factor in tfs_dict:
+        with open(os.path.join(result_path, tf + '.json')) as f:
+            sim_dict = json.loads(f.readline())
         for index, exp in enumerate(tfs_dict[t_factor]):
             if index % 100 == 0:
                 print('Done {} motifs for {}'.format(index, t_factor))
             if exp.get('motif_image') is None:
                 exp['motif_image'] = draw_svg(exp['pcm_path'])
             exp['motif_image'] = get_image_code(exp['motif_image'])
+            pcm_name = os.path.splitext(os.path.basename(exp['pcm_path']))[0]
+            for d_type in dict_types:
+                motifs = sim_dict.get(d_type)
+                if not motifs:
+                    exp[d_type] = {'motif': None, 'sim': None}
+                    continue
+                comp = motifs.get(pcm_name)
+                if not comp:
+                    exp[d_type] = {'motif': None, 'sim': None}
+                    continue
+                exp[d_type] = {'motif': draw_svg(get_comp_motif_path(comp['motif'])),
+                               'sim': round(comp['similarity'], 2)}
 
 
 @app.route('/hoco/<name>')
@@ -77,7 +97,7 @@ def hello(name=None, dictionary=None):
     tf_data = dictionary.get(name)
     if not name or not tf_data:
         return 'Error', 404
-    return render_template('tf_analysis.html', tf_data=tf_data, name=name, length=len(tf_data))
+    return render_template('tf_analysis.html', tf_data=tf_data, name=name, length=len(tf_data), d_types=dict_types)
 
 
 if __name__ == '__main__':

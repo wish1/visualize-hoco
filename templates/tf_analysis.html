@@ -37,7 +37,7 @@
                 <td>{{tf_data[i].time}}</td>
                 {%for d_type in d_types%}
                 {% if tf_data[i][d_type].motif %}
-                    <td style="display:flex; flex-direction: columns">
+                    <td >
                         <div style="display:flex">
                             <span>{{tf_data[i][d_type].name}}&nbsp;&nbsp;{{tf_data[i][d_type].sim}}</span>
                         </div>

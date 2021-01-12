@@ -13,6 +13,7 @@ app = Flask(__name__)
 
 cisbp_dict_path = os.path.expanduser('~/TF_Information_all_motifs_plus.txt')
 df = pd.read_table(cisbp_dict_path)
+df = df[df['TF_Status'] == 'D']
 cisbp_dict = pd.Series(df.TF_Name.values, index=df.Motif_ID).to_dict()
 
 

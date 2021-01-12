@@ -61,7 +61,7 @@ def get_image_code_for_json(tf_info, t_factor):
                 exp[d_type] = {'motif': None, 'sim': None}
                 continue
             exp[d_type] = {'motif': draw_svg(get_comp_motif_path(comp['motif'])),
-                           'sim': round(comp['similarity'], 2)}
+                           'sim': round(float(comp['similarity']), 2)}
 
 
 @app.route('/hoco/<name>')
@@ -97,7 +97,6 @@ def hello(name=None, dictionary=None):
     if not name or not tf_data:
         return 'Error', 404
     get_image_code_for_json(tf_data, name)
-    print(dict_types)
     return render_template('tf_analysis.html', tf_data=tf_data, name=name, length=len(tf_data), d_types=dict_types)
 
 

@@ -19,9 +19,7 @@
                 <th scope="col">Motif len</th>
                 <th scope="col">Total time</th>
                 {%for d_type in d_types%}
-                    <th>
-                        <span>{{d_type}}</span>
-                    </th>
+                <th scope="col"><span>{{d_type}}</span></th>
                 {%endfor%}
             </tr>
           </thead>
@@ -33,9 +31,7 @@
                 <td>{{tf_data[i].selected_by}}</td>
                 <td>{{tf_data[i].motif_type}}</td>
                 <td>{{tf_data[i].motif_index}}</td>
-                <td >
-                    <img height="30px" src="{{tf_data[i].motif_image}}"
-                    >
+                <td><img height="30px" src="{{tf_data[i].motif_image}}">
                 </td>
                 <td>{{tf_data[i].motif_len}}</td>
                 <td>{{tf_data[i].time}}</td>
@@ -50,9 +46,7 @@
                             <span>{{tf_data[i][d_type].sim}}</span>
                         </td>
                     {% else %}
-                        <td>
-                            <span>n/a</span>
-                        </td>
+                        <td>n/a</td>
                     {% endif %}
                 {%endfor%}
             </tr>

@@ -60,7 +60,7 @@ def get_image_code_for_json(tf_info, t_factor):
             if not comp:
                 exp[d_type] = {'motif': None, 'sim': None}
                 continue
-            exp[d_type] = {'motif': draw_svg(get_comp_motif_path(comp['motif'])),
+            exp[d_type] = {'motif': get_image_code(draw_svg(get_comp_motif_path(comp['motif']))),
                            'sim': round(float(comp['similarity']), 2)}
 
 

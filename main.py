@@ -97,6 +97,7 @@ def hello(name=None, dictionary=None):
     tf_data = dictionary.get(name)
     if not name or not tf_data:
         return 'Error', 404
+    print(dict_types)
     return render_template('tf_analysis.html', tf_data=tf_data, name=name, length=len(tf_data), d_types=dict_types)
 
 

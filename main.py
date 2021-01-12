@@ -6,10 +6,14 @@ from drawlogo import start
 import requests
 from flask import render_template, Flask
 from cairosvg import svg2png
-
+import pandas as pd
 from cor import dict_types, motif_dir, result_path
 
 app = Flask(__name__)
+
+cisbp_dict_path = os.path.expanduser('~/TF_Information_all_motifs_plus.txt')
+df = pd.read_table(cisbp_dict_path)
+cisbp_dict = pd.Series(df.TF_Name.values, index=df.Motif_ID).to_dict()
 
 
 def get_image_code(svg):
@@ -24,12 +28,13 @@ def get_image_code(svg):
     return 'data:image/png;base64,' + b64encode(result).decode('ascii')
 
 
-def draw_svg(pcm_path):
+def draw_svg(pcm_path, revcomp):
     directory = os.path.expanduser('~/svgs')
     out_path = os.path.join(directory, os.path.basename(pcm_path))
     if not os.path.isdir(directory):
         os.mkdir(directory)
     start.draw_logo(pcm_path,
+                    revcomp=revcomp,
                     out_path=out_path,
                     unit_height=80,
                     unit_width=40)
@@ -41,6 +46,10 @@ def get_comp_motif_path(motif_name):
     return os.path.join(motif_dir, motif_name + '.ppm')
 
 
+def get_cisbp_tf(motif_name):
+    return cisbp_dict.get(motif_name)
+
+
 def get_image_code_for_json(tf_info, t_factor):
     with open(os.path.join(result_path, tf + '.json')) as f:
         sim_dict = json.loads(f.readline())
@@ -48,20 +57,24 @@ def get_image_code_for_json(tf_info, t_factor):
         if index % 100 == 0:
             print('Done {} motifs for {}'.format(index, t_factor))
         if exp.get('motif_image') is None:
-            exp['motif_image'] = draw_svg(exp['pcm_path'])
+            exp['motif_image'] = draw_svg(exp['pcm_path'], False)
         exp['motif_image'] = get_image_code(exp['motif_image'])
         pcm_name = os.path.splitext(os.path.basename(exp['pcm_path']))[0]
         for d_type in dict_types:
             motifs = sim_dict.get(d_type)
             if not motifs:
-                exp[d_type] = {'motif': None, 'sim': None}
+                exp[d_type] = {'motif': None, 'sim': None, 'name': None}
                 continue
             comp = motifs.get(pcm_name)
             if not comp:
-                exp[d_type] = {'motif': None, 'sim': None}
+                exp[d_type] = {'motif': None, 'sim': None, 'name': None}
                 continue
-            exp[d_type] = {'motif': get_image_code(draw_svg(get_comp_motif_path(comp['motif']))),
-                           'sim': round(float(comp['similarity']), 2)}
+            tf_cisbp_name = get_cisbp_tf(comp['motif'])
+            exp[d_type] = {'motif': get_image_code(draw_svg(get_comp_motif_path(comp['motif']),
+                                                            True if comp['orientation'] == 'revcomp' else False)),
+                           'sim': round(float(comp['similarity']), 2),
+                           'name': tf_cisbp_name
+                           }
 
 
 @app.route('/hoco/<name>')
